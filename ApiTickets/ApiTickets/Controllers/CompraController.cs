@@ -10,6 +10,7 @@ using System.Data.Entity;
 
 namespace ApiTickets.Controllers
 {
+    [Authorize]
     public class CompraController : ApiController
     {
         private PticketsEntities dbContext = new PticketsEntities();

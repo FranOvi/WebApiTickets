@@ -24,6 +24,7 @@ namespace ConectarDatos
         public string email { get; set; }
         public string nombres { get; set; }
         public string apellidos { get; set; }
+        public string contrasena { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<compra> compra { get; set; }
