@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PticketsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="compra">
+          <Key>
+            <PropertyRef Name="compra_id" />
+          </Key>
+          <Property Name="compra_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cliente_id" Type="int" />
+          <Property Name="fecha" Type="datetime" />
+        </EntityType>
+        <EntityType Name="fila">
+          <Key>
+            <PropertyRef Name="fila_id" />
+          </Key>
+          <Property Name="fila_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sala_id" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sala">
+          <Key>
+            <PropertyRef Name="sala_id" />
+          </Key>
+          <Property Name="sala_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ticket">
+          <Key>
+            <PropertyRef Name="ticket_id" />
+          </Key>
+          <Property Name="ticket_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fila_id" Type="int" Nullable="false" />
+          <Property Name="compra_id" Type="int" Nullable="false" />
+          <Property Name="num_asiento" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="usuario_id" />
+          </Key>
+          <Property Name="usuario_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="nombres" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="apellidos" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_compra_ticket">
+          <End Role="ticket" Type="Self.ticket" Multiplicity="0..1" />
+          <End Role="compra" Type="Self.compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ticket">
+              <PropertyRef Name="ticket_id" />
+            </Principal>
+            <Dependent Role="compra">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_compra_usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="compra" Type="Self.compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="usuario_id" />
+            </Principal>
+            <Dependent Role="compra">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_fila_sala">
+          <End Role="sala" Type="Self.sala" Multiplicity="1" />
+          <End Role="fila" Type="Self.fila" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sala">
+              <PropertyRef Name="sala_id" />
+            </Principal>
+            <Dependent Role="fila">
+              <PropertyRef Name="sala_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ticket_fila">
+          <End Role="fila" Type="Self.fila" Multiplicity="1" />
+          <End Role="ticket" Type="Self.ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fila">
+              <PropertyRef Name="fila_id" />
+            </Principal>
+            <Dependent Role="ticket">
+              <PropertyRef Name="fila_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PticketsModelStoreContainer">
+          <EntitySet Name="compra" EntityType="Self.compra" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="fila" EntityType="Self.fila" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sala" EntityType="Self.sala" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ticket" EntityType="Self.ticket" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_compra_ticket" Association="Self.FK_compra_ticket">
+            <End Role="ticket" EntitySet="ticket" />
+            <End Role="compra" EntitySet="compra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_compra_usuario" Association="Self.FK_compra_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="compra" EntitySet="compra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_fila_sala" Association="Self.FK_fila_sala">
+            <End Role="sala" EntitySet="sala" />
+            <End Role="fila" EntitySet="fila" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ticket_fila" Association="Self.FK_ticket_fila">
+            <End Role="fila" EntitySet="fila" />
+            <End Role="ticket" EntitySet="ticket" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PticketsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="compra">
+          <Key>
+            <PropertyRef Name="compra_id" />
+          </Key>
+          <Property Name="compra_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cliente_id" Type="Int32" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ticket" Relationship="Self.FK_compra_ticket" FromRole="compra" ToRole="ticket" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_compra_usuario" FromRole="compra" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="fila">
+          <Key>
+            <PropertyRef Name="fila_id" />
+          </Key>
+          <Property Name="fila_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sala_id" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="sala" Relationship="Self.FK_fila_sala" FromRole="fila" ToRole="sala" />
+          <NavigationProperty Name="ticket" Relationship="Self.FK_ticket_fila" FromRole="fila" ToRole="ticket" />
+        </EntityType>
+        <EntityType Name="sala">
+          <Key>
+            <PropertyRef Name="sala_id" />
+          </Key>
+          <Property Name="sala_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="fila" Relationship="Self.FK_fila_sala" FromRole="sala" ToRole="fila" />
+        </EntityType>
+        <EntityType Name="ticket">
+          <Key>
+            <PropertyRef Name="ticket_id" />
+          </Key>
+          <Property Name="ticket_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fila_id" Type="Int32" Nullable="false" />
+          <Property Name="compra_id" Type="Int32" Nullable="false" />
+          <Property Name="num_asiento" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="compra" Relationship="Self.FK_compra_ticket" FromRole="ticket" ToRole="compra" />
+          <NavigationProperty Name="fila" Relationship="Self.FK_ticket_fila" FromRole="ticket" ToRole="fila" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="usuario_id" />
+          </Key>
+          <Property Name="usuario_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombres" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellidos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="compra" Relationship="Self.FK_compra_usuario" FromRole="usuario" ToRole="compra" />
+        </EntityType>
+        <Association Name="FK_compra_ticket">
+          <End Role="ticket" Type="Self.ticket" Multiplicity="0..1" />
+          <End Role="compra" Type="Self.compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ticket">
+              <PropertyRef Name="ticket_id" />
+            </Principal>
+            <Dependent Role="compra">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_compra_usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="compra" Type="Self.compra" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="usuario_id" />
+            </Principal>
+            <Dependent Role="compra">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_fila_sala">
+          <End Role="sala" Type="Self.sala" Multiplicity="1" />
+          <End Role="fila" Type="Self.fila" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sala">
+              <PropertyRef Name="sala_id" />
+            </Principal>
+            <Dependent Role="fila">
+              <PropertyRef Name="sala_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ticket_fila">
+          <End Role="fila" Type="Self.fila" Multiplicity="1" />
+          <End Role="ticket" Type="Self.ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fila">
+              <PropertyRef Name="fila_id" />
+            </Principal>
+            <Dependent Role="ticket">
+              <PropertyRef Name="fila_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PticketsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="compra" EntityType="Self.compra" />
+          <EntitySet Name="fila" EntityType="Self.fila" />
+          <EntitySet Name="sala" EntityType="Self.sala" />
+          <EntitySet Name="ticket" EntityType="Self.ticket" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" />
+          <AssociationSet Name="FK_compra_ticket" Association="Self.FK_compra_ticket">
+            <End Role="ticket" EntitySet="ticket" />
+            <End Role="compra" EntitySet="compra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_compra_usuario" Association="Self.FK_compra_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="compra" EntitySet="compra" />
+          </AssociationSet>
+          <AssociationSet Name="FK_fila_sala" Association="Self.FK_fila_sala">
+            <End Role="sala" EntitySet="sala" />
+            <End Role="fila" EntitySet="fila" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ticket_fila" Association="Self.FK_ticket_fila">
+            <End Role="fila" EntitySet="fila" />
+            <End Role="ticket" EntitySet="ticket" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PticketsModelStoreContainer" CdmEntityContainer="PticketsEntities">
+          <EntitySetMapping Name="compra">
+            <EntityTypeMapping TypeName="PticketsModel.compra">
+              <MappingFragment StoreEntitySet="compra">
+                <ScalarProperty Name="compra_id" ColumnName="compra_id" />
+                <ScalarProperty Name="cliente_id" ColumnName="cliente_id" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="fila">
+            <EntityTypeMapping TypeName="PticketsModel.fila">
+              <MappingFragment StoreEntitySet="fila">
+                <ScalarProperty Name="fila_id" ColumnName="fila_id" />
+                <ScalarProperty Name="sala_id" ColumnName="sala_id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sala">
+            <EntityTypeMapping TypeName="PticketsModel.sala">
+              <MappingFragment StoreEntitySet="sala">
+                <ScalarProperty Name="sala_id" ColumnName="sala_id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ticket">
+            <EntityTypeMapping TypeName="PticketsModel.ticket">
+              <MappingFragment StoreEntitySet="ticket">
+                <ScalarProperty Name="ticket_id" ColumnName="ticket_id" />
+                <ScalarProperty Name="fila_id" ColumnName="fila_id" />
+                <ScalarProperty Name="compra_id" ColumnName="compra_id" />
+                <ScalarProperty Name="num_asiento" ColumnName="num_asiento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuario">
+            <EntityTypeMapping TypeName="PticketsModel.usuario">
+              <MappingFragment StoreEntitySet="usuario">
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="nombres" ColumnName="nombres" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
