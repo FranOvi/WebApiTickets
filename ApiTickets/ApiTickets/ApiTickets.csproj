@@ -197,6 +197,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handler\ValidarTokenHandler.cs" />
     <Compile Include="Models\Compra.cs" />
     <Compile Include="Models\Fila.cs" />
     <Compile Include="Models\Sala.cs" />

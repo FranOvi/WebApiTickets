@@ -1,5 +1,4 @@
-﻿using ApiTickets.Models;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Collections.Generic;
@@ -11,19 +10,21 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
 using System.Text;
+using ConectarDatos;
 
 namespace ApiTickets.Controllers
 {
     public class LoginController : ApiController
     {
-            // POST: api/Login
+        private PticketsEntities dbContext = new PticketsEntities();
+        // POST: api/Login
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IHttpActionResult> LoginAsync(Usuario usuarioLogin)
+        public IHttpActionResult Login(usuario usuarioLogin)
         {
             if (usuarioLogin == null)  return BadRequest("Usuario y Contraseña requeridos.");
 
-            var _userInfo = await AutenticarUsuarioAsync(usuarioLogin.email, usuarioLogin.);
+            var _userInfo = AutenticarUsuario(usuarioLogin.email, usuarioLogin.contrasena);
             if (_userInfo != null)
             {
                 return Ok(new { token = GenerarTokenJWT(_userInfo) });
@@ -35,29 +36,25 @@ namespace ApiTickets.Controllers
         }
 
         // COMPROBAMOS SI EL USUARIO EXISTE EN LA BASE DE DATOS 
-        private async Task<Usuario> AutenticarUsuarioAsync(string usuario, string password)
+        private usuario AutenticarUsuario(string email, string password)
         {
-            // AQUÍ LA LÓGICA DE AUTENTICACIÓN //
+            var usr = (from u in dbContext.usuario
+                            where u.email == email
+                            && u.contrasena == password
+                       select u).FirstOrDefault();
 
-            // Supondremos que el usuario existe en la Base de Datos.
-            // Retornamos un objeto del tipo UsuarioInfo, con toda
-            // la información del usuario necesaria para el Token.
-            return new Usuario()
+            if (usr == null)
             {
-                // Id del Usuario en el Sistema de Información (BD)
-                usuario_id = 1,
-                nombres = "Nombre Usuario",
-                apellidos = "Apellidos Usuario",
-                email = "email.usuario@dominio.com"
-            };
-
-            // Supondremos que el usuario NO existe en la Base de Datos.
-            // Retornamos NULL.
-            //return null;
+                return null;
+            }
+            else
+            {
+                return usr;
+            }
         }
 
         // GENERAMOS EL TOKEN CON LA INFORMACIÓN DEL USUARIO
-        private string GenerarTokenJWT(Usuario usuarioInfo)
+        private string GenerarTokenJWT(usuario usuarioInfo)
         {
             // RECUPERAMOS LAS VARIABLES DE CONFIGURACIÓN
             var _ClaveSecreta = ConfigurationManager.AppSettings["ClaveSecreta"];
