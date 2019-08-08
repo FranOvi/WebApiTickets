@@ -27,7 +27,7 @@
             <PropertyRef Name="sala_id" />
           </Key>
           <Property Name="sala_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nombre" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="ticket">
           <Key>
@@ -46,7 +46,7 @@
           <Property Name="email" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="nombres" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="apellidos" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="contrasena" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="contrasena" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <Association Name="FK_compra_ticket">
           <End Role="ticket" Type="Self.ticket" Multiplicity="0..1" />
@@ -149,7 +149,7 @@
             <PropertyRef Name="sala_id" />
           </Key>
           <Property Name="sala_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nombre" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="fila" Relationship="Self.FK_fila_sala" FromRole="sala" ToRole="fila" />
         </EntityType>
         <EntityType Name="ticket">
@@ -172,7 +172,7 @@
           <Property Name="nombres" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="apellidos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="compra" Relationship="Self.FK_compra_usuario" FromRole="usuario" ToRole="compra" />
-          <Property Name="contrasena" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="contrasena" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_compra_ticket">
           <End Role="ticket" Type="Self.ticket" Multiplicity="0..1" />

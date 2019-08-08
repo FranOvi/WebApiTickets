@@ -9,5 +9,7 @@ namespace ApiTickets.Models
     {
         public int sala_id { get; set; }
         public string nombre { get; set; }
+
+     
     }
 }

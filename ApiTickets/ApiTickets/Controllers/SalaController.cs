@@ -19,6 +19,7 @@ namespace ApiTickets.Controllers
         {
             using (PticketsEntities pticketsEntities = new PticketsEntities())
             {
+               
                 return pticketsEntities.sala.ToList();
             }
         }
