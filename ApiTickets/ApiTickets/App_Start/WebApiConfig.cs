@@ -20,6 +20,12 @@ namespace ApiTickets
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "Salas",
+                routeTemplate: "api/Sala/GetExistencias",
+                defaults: new { action = "GetExistencias", controller = "Sala", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

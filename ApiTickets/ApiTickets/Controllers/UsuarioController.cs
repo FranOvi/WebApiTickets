@@ -14,6 +14,7 @@ namespace ApiTickets.Controllers
     {
         private PticketsEntities dbContext = new PticketsEntities();
 
+        [Authorize]
         //visualiza todos los registros api/usuario
         [HttpGet]
         public IEnumerable<usuario> Get()
@@ -24,6 +25,7 @@ namespace ApiTickets.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public usuario Get(int id)
         {
@@ -48,6 +50,7 @@ namespace ApiTickets.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public IHttpActionResult ActualizarUsuario(int id, [FromBody]usuario usu)
         {
@@ -72,6 +75,7 @@ namespace ApiTickets.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         public IHttpActionResult EliminarUsuario(int id)
         {

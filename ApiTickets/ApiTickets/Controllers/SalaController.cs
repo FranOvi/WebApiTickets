@@ -33,6 +33,30 @@ namespace ApiTickets.Controllers
             }
         }
 
+        [HttpGet]
+        [ActionName("GetExistencias")]
+        public IEnumerable<object> GetExistencias()
+        {
+            using (PticketsEntities pticketsEntities = new PticketsEntities())
+            {
+                var salaIni = from s in dbContext.sala
+                              join f in dbContext.fila on s.sala_id equals f.sala_id into fLeft
+                              from fl in fLeft.DefaultIfEmpty()
+                              join t in dbContext.ticket on fl.fila_id equals t.fila_id into tLeft
+                              from ti in tLeft.DefaultIfEmpty()
+                              group new { fl.cantidad, fl.fila_id, ti.ticket_id } by new { s.sala_id, s.nombre } into grp
+                              select new
+                              {
+                                  sala_id = grp.Key.sala_id,
+                                  nombre = grp.Key.nombre,
+                                  numTotal = grp.Select(fil => new { fil.cantidad , fil.fila_id }).Distinct().Sum(fil => (int?)fil.cantidad ?? 0),
+                                  //numTotal = grp.Sum(fil => (int?)fil.cantidad ?? 0),
+                                  numOcupado = grp.Count(tck => ((int?)tck.ticket_id ?? 0) > 0)
+                              };
+                return salaIni.ToList();
+            }
+        }
+
         [HttpPost]
         public IHttpActionResult AgregaSala([FromBody]sala sa)
         {
