@@ -21,7 +21,7 @@ namespace ApiTickets.Controllers
         {
             using (PticketsEntities pticketsEntities = new PticketsEntities())
             {
-                return pticketsEntities.compra.ToList();
+                return dbContext.compra.ToList();
             }
         }
 
@@ -30,7 +30,7 @@ namespace ApiTickets.Controllers
         {
             using (PticketsEntities pticketsEntities = new PticketsEntities())
             {
-                return pticketsEntities.compra.FirstOrDefault(e => e.compra_id == id);
+                return dbContext.compra.FirstOrDefault(e => e.compra_id == id);
             }
         }
 
@@ -39,8 +39,16 @@ namespace ApiTickets.Controllers
         {
             if (ModelState.IsValid)
             {
+                //var claimsIdentity = System.Web.HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
+                //com.cliente_id = int.Parse(claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value);
                 dbContext.compra.Add(com);
                 dbContext.SaveChanges();
+
+                foreach (var tck in com.ticket)
+                {
+                    dbContext.ticket.Add(tck);
+                    dbContext.SaveChanges();
+                }
                 return Ok(com);
             }
             else

@@ -25,11 +25,28 @@ namespace ApiTickets.Controllers
         }
 
         [HttpGet]
-        public sala Get(int id)
+        public object Get(int id)
         {
             using (PticketsEntities pticketsEntities = new PticketsEntities())
             {
-                return pticketsEntities.sala.FirstOrDefault(e => e.sala_id == id);
+                //return pticketsEntities.sala.Include(s => s.fila.Select(f => f.ticket)).FirstOrDefault(s => s.sala_id == id);
+
+                return pticketsEntities.sala
+                    .Select(s => new
+                    {
+                        sala_id = s.sala_id,
+                        nombre = s.nombre,
+                        fila = s.fila.Select(f => new { f.fila_id, f.nombre, f.cantidad, ticket = f.ticket.Select(t => new { t.ticket_id, t.num_asiento }) }).OrderBy(f => f.nombre),
+                        //ticket = s.fila.Select(f => f.ticket.Select(t => new { t.ticket_id, t.num_asiento }))
+                    }).FirstOrDefault(s => s.sala_id == id);
+
+                //return pticketsEntities.sala
+                //    .Select(s => new {
+                //        sala_id = s.sala_id,
+                //        nombre = s.nombre,
+                //        fila = s.fila.Select(f => new { f.fila_id, f.nombre, f.cantidad }).OrderBy(f => f.nombre),
+                //        ticket = s.fila.Select(f => f.ticket.Select(t => new { t.ticket_id, t.num_asiento }))
+                //    }).FirstOrDefault(s => s.sala_id == id);
             }
         }
 
