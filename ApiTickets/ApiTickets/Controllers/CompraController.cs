@@ -39,16 +39,23 @@ namespace ApiTickets.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var claimsIdentity = System.Web.HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
-                //com.cliente_id = int.Parse(claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value);
+                var claimsIdentity = System.Web.HttpContext.Current.User.Identity as System.Security.Claims.ClaimsIdentity;
+                var userEmail = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                com.cliente_id = dbContext.usuario.FirstOrDefault(e => e.email == userEmail).usuario_id;
+                com.fecha = DateTime.Now;
+
+                //Chequeamos que existe y que esta dentro del rango de numero de asiento
+                foreach (var tck in com.ticket)
+                {
+                    //Chequeo que el numero de asiento que se quiere comprar este dentro del rango de asientos de la fila
+                    var fila = dbContext.fila.Where(f => f.fila_id == tck.fila_id).FirstOrDefault();
+                    if (tck.num_asiento <= 0 || tck.num_asiento > fila.cantidad) return BadRequest("Numero de asiento fuera de la capacidad de la fila");
+                    if(dbContext.ticket.Where(t => t.num_asiento == tck.num_asiento && t.fila_id == tck.fila_id).ToList().Count() > 0) return BadRequest("Asiento ya comprado");
+                }
+
                 dbContext.compra.Add(com);
                 dbContext.SaveChanges();
 
-                foreach (var tck in com.ticket)
-                {
-                    dbContext.ticket.Add(tck);
-                    dbContext.SaveChanges();
-                }
                 return Ok(com);
             }
             else
