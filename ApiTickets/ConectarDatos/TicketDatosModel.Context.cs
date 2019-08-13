@@ -18,6 +18,7 @@ namespace ConectarDatos
         public PticketsEntities()
             : base("name=PticketsEntities")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

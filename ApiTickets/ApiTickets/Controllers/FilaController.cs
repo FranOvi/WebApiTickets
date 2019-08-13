@@ -19,7 +19,8 @@ namespace ApiTickets.Controllers
         {
             using (PticketsEntities pticketsEntities = new PticketsEntities())
             {
-                return pticketsEntities.fila.ToList();
+                IQueryable<fila> query = dbContext.fila.Include(m => m.sala);
+                return query.ToList();          
             }
         }
 
